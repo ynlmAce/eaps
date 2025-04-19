@@ -4,16 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ca2f5ec8-2c96-4e34-8ad6-81b485d3ea27" name="更改" comment="">
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/fq/yznu/eaps/EapsApplicationTests.java" beforeDir="false" />
-    </list>
+    <list default="true" id="ca2f5ec8-2c96-4e34-8ad6-81b485d3ea27" name="更改" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -68,7 +66,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1745033073782</updated>
-      <workItem from="1745033074829" duration="6933000" />
+      <workItem from="1745033074829" duration="7289000" />
     </task>
     <servers />
   </component>
