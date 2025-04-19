@@ -1,1 +1,1 @@
-毕设项目，平台的架构主要采用前后端分离的模式，前端使用Vue.js进行开发，后端使用SpringBoot进行开发，数据库采用MySQL进行存储。![Uploading image.png…]()
+毕设项目，平台的架构主要采用前后端分离的模式，前端使用Vue.js进行开发，后端使用SpringBoot进行开发，数据库采用MySQL进行存储。
