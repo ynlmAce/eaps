@@ -1,0 +1,117 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: eaps
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/eaps?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    druid:
+      initial-size: 5
+      min-idle: 10
+      max-active: 20
+      max-wait: 60000
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      database: 0
+      timeout: 10s
+      lettuce:
+        pool:
+          min-idle: 0
+          max-idle: 8
+          max-active: 8
+          max-wait: -1ms
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 20MB
+  mail:
+    host: smtp.163.com
+    username: your_email@163.com
+    password: your_password
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: com.fq.yznu.eaps.entity
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+
+# 文件上传路径
+file:
+  upload:
+    path: ./uploads
+
+# JWT配置
+jwt:
+  secret: eaps-secret-key
+  expiration: 86400 # 24小时
+  reset-expiration: 1800 # 30分钟，重置密码token有效期
+  tokenHeader: Authorization
+  tokenPrefix: Bearer
+
+# 系统配置参数
+eaps:
+  admin:
+    username: admin
+    password: admin123
+  # 通知配置
+  notification:
+    default-channels: SITE_MESSAGE,EMAIL
+  # 评分配置
+  rating:
+    min-count-for-display: 5
+  # 安全配置
+  security:
+    content-sensitive-words: offensive,inappropriate
+    max-login-attempts: 5
+    login-lockout-time: 15 # 单位：分钟
+
+# knife4j配置
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: "default"
+      paths-to-match: "/**"
+      packages-to-scan: com.fq.yznu.eaps.controller
+
+knife4j:
+  enable: true
+  setting:
+    language: zh-CN
+    swagger-model-name: 实体类列表
+
+# 日志配置
+logging:
+  level:
+    com.fq.yznu.eaps: debug
+    org.springframework: info

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fq.yznu.eaps.mapper.EmploymentInfoMapper">
+
+    <!-- 分页查询就业信息列表 -->
+    <select id="selectEmploymentInfoPage" resultType="com.fq.yznu.eaps.entity.EmploymentInfo">
+        SELECT 
+            ei.*
+        FROM 
+            employment_info ei
+        WHERE 
+            ei.deleted = 0
+            <if test="studentId != null">
+                AND ei.student_id = #{studentId}
+            </if>
+            <if test="enterpriseId != null">
+                AND ei.enterprise_id = #{enterpriseId}
+            </if>
+            <if test="status != null">
+                AND ei.verify_status = #{status}
+            </if>
+        ORDER BY 
+            ei.create_time DESC
+    </select>
+
+    <!-- 查询就业统计数据 -->
+    <select id="selectEmploymentStatistics" resultType="com.fq.yznu.eaps.vo.EmploymentStatisticsVO">
+        <choose>
+            <!-- 按班级统计 -->
+            <when test="classId != null">
+                SELECT
+                    c.id,
+                    c.class_name as name,
+                    COUNT(si.id) as total_count,
+                    SUM(CASE WHEN ei.employment_status = 1 THEN 1 ELSE 0 END) as employed_count,
+                    SUM(CASE WHEN ei.employment_status = 0 THEN 1 ELSE 0 END) as unemployed_count,
+                    SUM(CASE WHEN ei.employment_status = 2 THEN 1 ELSE 0 END) as postgraduate_count,
+                    SUM(CASE WHEN ei.employment_status = 3 THEN 1 ELSE 0 END) as entrepreneurship_count,
+                    SUM(CASE WHEN ei.employment_status = 4 THEN 1 ELSE 0 END) as other_count
+                FROM
+                    class_info c
+                    LEFT JOIN student_info si ON si.class_id = c.id
+                    LEFT JOIN employment_info ei ON ei.student_id = si.id AND ei.deleted = 0 AND ei.verify_status = 1
+                WHERE
+                    c.id = #{classId}
+                    AND si.graduation_year = #{graduationYear}
+                GROUP BY
+                    c.id
+            </when>
+            <!-- 按专业统计 -->
+            <when test="majorId != null">
+                SELECT
+                    c.id,
+                    c.class_name as name,
+                    COUNT(si.id) as total_count,
+                    SUM(CASE WHEN ei.employment_status = 1 THEN 1 ELSE 0 END) as employed_count,
+                    SUM(CASE WHEN ei.employment_status = 0 THEN 1 ELSE 0 END) as unemployed_count,
+                    SUM(CASE WHEN ei.employment_status = 2 THEN 1 ELSE 0 END) as postgraduate_count,
+                    SUM(CASE WHEN ei.employment_status = 3 THEN 1 ELSE 0 END) as entrepreneurship_count,
+                    SUM(CASE WHEN ei.employment_status = 4 THEN 1 ELSE 0 END) as other_count
+                FROM
+                    class_info c
+                    LEFT JOIN student_info si ON si.class_id = c.id
+                    LEFT JOIN employment_info ei ON ei.student_id = si.id AND ei.deleted = 0 AND ei.verify_status = 1
+                WHERE
+                    c.major_id = #{majorId}
+                    AND si.graduation_year = #{graduationYear}
+                GROUP BY
+                    c.id
+            </when>
+            <!-- 按学院统计 -->
+            <otherwise>
+                SELECT
+                    m.id,
+                    m.major_name as name,
+                    COUNT(si.id) as total_count,
+                    SUM(CASE WHEN ei.employment_status = 1 THEN 1 ELSE 0 END) as employed_count,
+                    SUM(CASE WHEN ei.employment_status = 0 THEN 1 ELSE 0 END) as unemployed_count,
+                    SUM(CASE WHEN ei.employment_status = 2 THEN 1 ELSE 0 END) as postgraduate_count,
+                    SUM(CASE WHEN ei.employment_status = 3 THEN 1 ELSE 0 END) as entrepreneurship_count,
+                    SUM(CASE WHEN ei.employment_status = 4 THEN 1 ELSE 0 END) as other_count
+                FROM
+                    major_info m
+                    LEFT JOIN student_info si ON si.major_id = m.id
+                    LEFT JOIN employment_info ei ON ei.student_id = si.id AND ei.deleted = 0 AND ei.verify_status = 1
+                WHERE
+                    <if test="collegeId != null">
+                        m.college_id = #{collegeId}
+                    </if>
+                    AND si.graduation_year = #{graduationYear}
+                GROUP BY
+                    m.id
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 按学院统计就业情况 -->
+    <select id="countEmploymentByCollege" resultType="java.util.Map">
+        SELECT
+            c.id,
+            c.college_name as name,
+            COUNT(si.id) as total_count,
+            SUM(CASE WHEN ei.employment_status = 1 THEN 1 ELSE 0 END) as employed_count,
+            SUM(CASE WHEN ei.employment_status = 0 THEN 1 ELSE 0 END) as unemployed_count,
+            SUM(CASE WHEN ei.employment_status = 2 THEN 1 ELSE 0 END) as postgraduate_count,
+            SUM(CASE WHEN ei.employment_status = 3 THEN 1 ELSE 0 END) as entrepreneurship_count,
+            SUM(CASE WHEN ei.employment_status = 4 THEN 1 ELSE 0 END) as other_count
+        FROM
+            college_info c
+            LEFT JOIN student_info si ON si.college_id = c.id
+            LEFT JOIN employment_info ei ON ei.student_id = si.id AND ei.deleted = 0 AND ei.verify_status = 1
+        WHERE
+            si.graduation_year = #{graduationYear}
+        GROUP BY
+            c.id
+    </select>
+
+    <!-- 按专业统计就业情况 -->
+    <select id="countEmploymentByMajor" resultType="java.util.Map">
+        SELECT
+            m.id,
+            m.major_name as name,
+            COUNT(si.id) as total_count,
+            SUM(CASE WHEN ei.employment_status = 1 THEN 1 ELSE 0 END) as employed_count,
+            SUM(CASE WHEN ei.employment_status = 0 THEN 1 ELSE 0 END) as unemployed_count,
+            SUM(CASE WHEN ei.employment_status = 2 THEN 1 ELSE 0 END) as postgraduate_count,
+            SUM(CASE WHEN ei.employment_status = 3 THEN 1 ELSE 0 END) as entrepreneurship_count,
+            SUM(CASE WHEN ei.employment_status = 4 THEN 1 ELSE 0 END) as other_count
+        FROM
+            major_info m
+            LEFT JOIN student_info si ON si.major_id = m.id
+            LEFT JOIN employment_info ei ON ei.student_id = si.id AND ei.deleted = 0 AND ei.verify_status = 1
+        WHERE
+            m.college_id = #{collegeId}
+            AND si.graduation_year = #{graduationYear}
+        GROUP BY
+            m.id
+    </select>
+
+    <!-- 按班级统计就业情况 -->
+    <select id="countEmploymentByClass" resultType="java.util.Map">
+        SELECT
+            c.id,
+            c.class_name as name,
+            COUNT(si.id) as total_count,
+            SUM(CASE WHEN ei.employment_status = 1 THEN 1 ELSE 0 END) as employed_count,
+            SUM(CASE WHEN ei.employment_status = 0 THEN 1 ELSE 0 END) as unemployed_count,
+            SUM(CASE WHEN ei.employment_status = 2 THEN 1 ELSE 0 END) as postgraduate_count,
+            SUM(CASE WHEN ei.employment_status = 3 THEN 1 ELSE 0 END) as entrepreneurship_count,
+            SUM(CASE WHEN ei.employment_status = 4 THEN 1 ELSE 0 END) as other_count
+        FROM
+            class_info c
+            LEFT JOIN student_info si ON si.class_id = c.id
+            LEFT JOIN employment_info ei ON ei.student_id = si.id AND ei.deleted = 0 AND ei.verify_status = 1
+        WHERE
+            c.major_id = #{majorId}
+            AND si.graduation_year = #{graduationYear}
+        GROUP BY
+            c.id
+    </select>
+
+</mapper> 

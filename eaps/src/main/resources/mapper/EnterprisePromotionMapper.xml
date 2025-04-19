@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fq.yznu.eaps.mapper.EnterprisePromotionMapper">
+
+    <!-- 分页查询企业宣传信息 -->
+    <select id="selectPromotionPage" resultType="com.fq.yznu.eaps.entity.EnterprisePromotion">
+        SELECT
+            p.*,
+            e.enterprise_name as enterpriseName
+        FROM
+            enterprise_promotion p
+        LEFT JOIN
+            enterprise_info e ON p.enterprise_id = e.id
+        WHERE
+            p.deleted = 0
+            <if test="enterpriseId != null">
+                AND p.enterprise_id = #{enterpriseId}
+            </if>
+            <if test="type != null">
+                AND p.type = #{type}
+            </if>
+            <if test="status != null">
+                AND p.status = #{status}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                AND (
+                    p.title LIKE CONCAT('%', #{keyword}, '%') OR
+                    p.content LIKE CONCAT('%', #{keyword}, '%') OR
+                    e.enterprise_name LIKE CONCAT('%', #{keyword}, '%')
+                )
+            </if>
+        ORDER BY
+            p.is_top DESC,
+            p.priority DESC,
+            p.create_time DESC
+    </select>
+    
+    <!-- 查询待审核的宣传信息数量 -->
+    <select id="countPendingReview" resultType="java.lang.Integer">
+        SELECT
+            COUNT(1)
+        FROM
+            enterprise_promotion
+        WHERE
+            status = 0
+            AND deleted = 0
+    </select>
+</mapper> 
