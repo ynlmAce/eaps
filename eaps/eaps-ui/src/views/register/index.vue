@@ -13,12 +13,15 @@
 
       <!-- 用户类型选择 -->
       <el-form-item label="用户类型" prop="userType">
-        <el-radio-group  v-model="registerForm.userType" style="gap: 95px;">
+
+        <el-radio-group  v-model="registerForm.userType" style="gap: 30px;">
           <el-radio :label="0">学生</el-radio>
           <el-radio :label="3">企业</el-radio>
           <el-radio :label="4">辅导员</el-radio>
         </el-radio-group>
+
       </el-form-item>
+
 
       <!-- 基本信息 -->
       <el-form-item label="用户名" prop="username">

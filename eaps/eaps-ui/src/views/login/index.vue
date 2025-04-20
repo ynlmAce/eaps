@@ -1,6 +1,6 @@
 <template>
   <div class="login-container">
-    <div class="left-banner"></div>
+    <div class="left-banner">  </div>
     <div class="login-box">
       <!-- 登录表单区域 -->
       <el-form
@@ -58,8 +58,8 @@
         </div>
       </el-form>
     </div>
-
   </div>
+
 </template>
 
 
@@ -165,13 +165,14 @@ body{
 .login-box {
   width: 480px;
   max-width: 100vw;
+  height: 100%;
+  margin-left: auto;
   background-color: #fff;
   padding: 60px 50px 40px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   box-shadow: -8px 0 20px rgba(0, 0, 0, 0.05);
-  z-index: 2;
 }
 
 /* 标题部分 */
@@ -205,6 +206,7 @@ body{
 }
 
 .register-container {
+  color: black;
   text-align: right;
   font-size: 14px;
 }
