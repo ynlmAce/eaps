@@ -18,7 +18,7 @@ public interface EmploymentInfoService extends IService<EmploymentInfo> {
     /**
      * 分页查询就业信息
      *
-     * @param page 分页参数
+     * @param page  分页参数
      * @param query 查询条件
      * @return 分页结果
      */
@@ -43,7 +43,7 @@ public interface EmploymentInfoService extends IService<EmploymentInfo> {
     /**
      * 审核就业信息
      *
-     * @param id 就业信息ID
+     * @param id           就业信息ID
      * @param verifyStatus 审核状态
      * @param verifyRemark 审核备注
      * @return 是否成功
@@ -77,7 +77,7 @@ public interface EmploymentInfoService extends IService<EmploymentInfo> {
     /**
      * 获取专业就业统计
      *
-     * @param collegeId 学院ID
+     * @param collegeId      学院ID
      * @param graduationYear 毕业年份
      * @return 专业就业统计
      */
@@ -86,7 +86,7 @@ public interface EmploymentInfoService extends IService<EmploymentInfo> {
     /**
      * 获取班级就业统计
      *
-     * @param majorId 专业ID
+     * @param majorId        专业ID
      * @param graduationYear 毕业年份
      * @return 班级就业统计
      */
@@ -135,7 +135,7 @@ public interface EmploymentInfoService extends IService<EmploymentInfo> {
     /**
      * 按学院生成就业报表
      *
-     * @param collegeId 学院ID
+     * @param collegeId      学院ID
      * @param graduationYear 毕业年份
      * @return 报表文件路径
      */
@@ -144,7 +144,7 @@ public interface EmploymentInfoService extends IService<EmploymentInfo> {
     /**
      * 按专业生成就业报表
      *
-     * @param majorId 专业ID
+     * @param majorId        专业ID
      * @param graduationYear 毕业年份
      * @return 报表文件路径
      */
@@ -153,9 +153,26 @@ public interface EmploymentInfoService extends IService<EmploymentInfo> {
     /**
      * 按班级生成就业报表
      *
-     * @param classId 班级ID
+     * @param classId        班级ID
      * @param graduationYear 毕业年份
      * @return 报表文件路径
      */
     String generateClassReport(Long classId, Integer graduationYear);
-} 
+
+    /**
+     * 获取学生的就业信息
+     *
+     * @param studentId      学生ID
+     * @param graduationYear 毕业年份
+     * @return 就业信息
+     */
+    EmploymentInfo getByStudentId(Long studentId, Integer graduationYear);
+
+    /**
+     * 提交就业信息（学生用）
+     *
+     * @param employmentInfo 就业信息
+     * @return 是否成功
+     */
+    boolean submitEmploymentInfo(EmploymentInfo employmentInfo);
+}

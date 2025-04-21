@@ -92,7 +92,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
         queryWrapper.eq(JobApplication::getStudentId, currentUser.getId());
         // 排除已撤销的申请
         queryWrapper.ne(JobApplication::getStatus, 5); // 5表示已撤销
-        
+
         Long count = jobApplicationMapper.selectCount(queryWrapper);
         if (count > 0) {
             throw new BusinessException("您已申请过该职位，不能重复申请");
@@ -111,6 +111,9 @@ public class JobApplicationServiceImpl implements JobApplicationService {
 
             // 生成文件保存路径
             String originalFilename = resume.getOriginalFilename();
+            if (originalFilename == null) {
+                throw new BusinessException("文件名不能为空");
+            }
             String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
             String fileName = UUID.randomUUID().toString() + fileExtension;
             String filePath = uploadPath + File.separator + "resumes" + File.separator + fileName;
@@ -131,7 +134,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
         } else {
             // 设置简历类型为在线填写
             application.setResumeType(0);
-            
+
             // 检查简历内容是否存在
             if (!StringUtils.hasText(application.getResumeContent())) {
                 throw new BusinessException("请填写简历内容");
@@ -256,7 +259,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
             if (enterpriseInfo == null || !application.getEnterpriseId().equals(enterpriseInfo.getId())) {
                 throw new BusinessException("无权查看此申请");
             }
-            
+
             // 如果企业第一次查看此申请，更新查看时间和状态
             if (application.getStatus() == 0 && application.getViewTime() == null) {
                 JobApplication updateApplication = new JobApplication();
@@ -264,7 +267,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
                 updateApplication.setStatus(1); // 1: 已查看
                 updateApplication.setViewTime(LocalDateTime.now());
                 jobApplicationMapper.updateById(updateApplication);
-                
+
                 // 更新本地对象，用于返回
                 application.setStatus(1);
                 application.setViewTime(LocalDateTime.now());
@@ -496,4 +499,4 @@ public class JobApplicationServiceImpl implements JobApplicationService {
         // 更新申请信息
         jobApplicationMapper.updateById(updateApplication);
     }
-} 
+}

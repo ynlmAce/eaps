@@ -2,7 +2,7 @@ package com.fq.yznu.eaps.vo.request;
 
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * 评分审核请求对象

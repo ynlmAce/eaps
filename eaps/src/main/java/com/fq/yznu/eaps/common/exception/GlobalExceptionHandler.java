@@ -1,7 +1,8 @@
 package com.fq.yznu.eaps.common.exception;
 
 import com.fq.yznu.eaps.common.ResponseResult;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.BindException;
@@ -14,9 +15,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 /**
  * 全局异常处理器
  */
-@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     /**
      * 处理自定义业务异常
@@ -81,15 +83,15 @@ public class GlobalExceptionHandler {
      */
     private String getBindingResultMessage(BindingResult bindingResult) {
         StringBuilder sb = new StringBuilder();
-        
+
         for (FieldError fieldError : bindingResult.getFieldErrors()) {
             sb.append(fieldError.getField()).append(": ").append(fieldError.getDefaultMessage()).append(", ");
         }
-        
+
         if (sb.length() > 0) {
             sb.delete(sb.length() - 2, sb.length());
         }
-        
+
         return sb.toString();
     }
-} 
+}

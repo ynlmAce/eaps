@@ -35,10 +35,10 @@ public interface EnterpriseInfoService {
     void updateEnterpriseInfo(EnterpriseInfo enterpriseInfo, MultipartFile license, MultipartFile logo);
 
     /**
-     * 获取企业列表（分页）
+     * 获取企业列表
      *
      * @param params 查询参数
-     * @return 企业列表
+     * @return 企业列表与分页信息
      */
     Map<String, Object> getEnterpriseList(Map<String, Object> params);
 
@@ -53,8 +53,8 @@ public interface EnterpriseInfoService {
     /**
      * 审核企业信息
      *
-     * @param id           企业ID
-     * @param verifyStatus 审核状态（1：通过，2：拒绝）
+     * @param id            企业ID
+     * @param verifyStatus  审核状态（1：通过，2：拒绝）
      * @param verifyComment 审核意见
      */
     void verifyEnterprise(Long id, Integer verifyStatus, String verifyComment);

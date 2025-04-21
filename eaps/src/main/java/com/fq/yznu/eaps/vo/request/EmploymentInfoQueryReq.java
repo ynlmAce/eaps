@@ -3,10 +3,20 @@ package com.fq.yznu.eaps.vo.request;
 import lombok.Data;
 
 /**
- * 就业信息查询请求DTO
+ * 就业信息查询请求
  */
 @Data
 public class EmploymentInfoQueryReq {
+
+    /**
+     * 页码
+     */
+    private Integer pageNum = 1;
+
+    /**
+     * 每页大小
+     */
+    private Integer pageSize = 10;
 
     /**
      * 学生ID
@@ -14,19 +24,19 @@ public class EmploymentInfoQueryReq {
     private Long studentId;
 
     /**
-     * 就业状态：0未就业，1已就业，2升学，3创业，4灵活就业
+     * 关键词搜索
      */
-    private Integer employmentStatus;
+    private String keyword;
 
     /**
-     * 审核状态：0待审核，1已通过，2已拒绝
+     * 学生姓名
      */
-    private Integer verifyStatus;
+    private String studentName;
 
     /**
-     * 毕业年份
+     * 学号
      */
-    private Integer graduationYear;
+    private String studentNo;
 
     /**
      * 学院ID
@@ -44,17 +54,25 @@ public class EmploymentInfoQueryReq {
     private Long classId;
 
     /**
-     * 关键词搜索（学生姓名、学号、单位名称、岗位名称）
+     * 毕业年份
      */
-    private String keyword;
+    private Integer graduationYear;
 
     /**
-     * 当前页码
+     * 就业状态
      */
-    private Integer pageNum = 1;
+    private Integer employmentStatus;
 
     /**
-     * 每页数量
+     * 审核状态
      */
-    private Integer pageSize = 10;
-} 
+    private Integer verifyStatus;
+
+    public Long getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(Long studentId) {
+        this.studentId = studentId;
+    }
+}

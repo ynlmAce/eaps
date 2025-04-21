@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,7 +70,7 @@ public class JobPositionServiceImpl implements JobPositionService {
 
         // 设置职位信息
         jobPosition.setEnterpriseId(enterpriseInfo.getId());
-        jobPosition.setPublishTime(new Date());
+        jobPosition.setPublishTime(LocalDateTime.now());
         jobPosition.setStatus(0); // 0: 待审核
 
         // 保存职位信息
@@ -224,7 +224,7 @@ public class JobPositionServiceImpl implements JobPositionService {
         updatePosition.setId(id);
         updatePosition.setStatus(status);
         if (status == 2 && StringUtils.hasText(reason)) {
-            updatePosition.setRejectReason(reason);
+            updatePosition.setReviewComment(reason);
         }
 
         jobPositionMapper.updateById(updatePosition);
@@ -348,4 +348,4 @@ public class JobPositionServiceImpl implements JobPositionService {
 
         return jobPosition;
     }
-} 
+}

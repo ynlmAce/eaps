@@ -6,7 +6,8 @@ import com.fq.yznu.eaps.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
+
 import java.util.Map;
 
 /**
@@ -55,21 +56,33 @@ public class AuthController {
     }
 
     /**
-     * 找回密码
+     * 获取密保问题
      *
-     * @param data 找回密码所需数据
-     * @return 成功响应
+     * @param username 用户名
+     * @return 密保问题
      */
-    @PostMapping("/forgot-password")
-    public ResponseResult<Void> forgotPassword(@RequestBody Map<String, String> data) {
-        authService.forgotPassword(data.get("username"), data.get("email"));
-        return ResponseResult.success();
+    @GetMapping("/security-question/{username}")
+    public ResponseResult<String> getSecurityQuestion(@PathVariable String username) {
+        String question = authService.getSecurityQuestion(username);
+        return ResponseResult.success(question);
+    }
+
+    /**
+     * 验证密保答案
+     *
+     * @param data 验证信息
+     * @return 重置令牌
+     */
+    @PostMapping("/verify-security-answer")
+    public ResponseResult<String> verifySecurityAnswer(@RequestBody Map<String, String> data) {
+        String token = authService.verifySecurityAnswer(data.get("username"), data.get("answer"));
+        return ResponseResult.success(token);
     }
 
     /**
      * 重置密码
      *
-     * @param data 重置密码所需数据
+     * @param data 重置密码信息
      * @return 成功响应
      */
     @PostMapping("/reset-password")
@@ -77,4 +90,4 @@ public class AuthController {
         authService.resetPassword(data.get("token"), data.get("password"));
         return ResponseResult.success();
     }
-} 
+}

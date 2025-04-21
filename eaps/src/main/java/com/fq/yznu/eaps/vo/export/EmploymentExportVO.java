@@ -4,6 +4,7 @@ import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import com.alibaba.excel.annotation.write.style.HeadRowHeight;
 import lombok.Data;
+import java.math.BigDecimal;
 
 /**
  * 就业信息导出VO
@@ -115,7 +116,7 @@ public class EmploymentExportVO {
      */
     @ExcelProperty("月薪(元)")
     @ColumnWidth(10)
-    private Integer monthlySalary;
+    private BigDecimal monthlySalary;
 
     /**
      * 合同期限（月）
@@ -172,4 +173,12 @@ public class EmploymentExportVO {
     @ExcelProperty("审核状态")
     @ColumnWidth(10)
     private String verifyStatus;
-} 
+
+    public BigDecimal getMonthlySalary() {
+        return monthlySalary;
+    }
+
+    public void setMonthlySalary(BigDecimal monthlySalary) {
+        this.monthlySalary = monthlySalary;
+    }
+}

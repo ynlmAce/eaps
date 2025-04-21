@@ -110,7 +110,7 @@ public class StudentInfoServiceImpl implements StudentInfoService {
         // 检查是否为学生或管理员
         boolean isAdmin = currentUser.getUserType() == 2;
         boolean isStudent = currentUser.getUserType() == 0;
-        
+
         if (!isStudent && !isAdmin) {
             throw new BusinessException("无权限更新学生信息");
         }
@@ -124,21 +124,21 @@ public class StudentInfoServiceImpl implements StudentInfoService {
             if (existInfo == null) {
                 throw new BusinessException("学生信息不存在");
             }
-            
+
             // 确保是更新自己的信息
             if (!existInfo.getId().equals(studentInfo.getId())) {
                 throw new BusinessException("无权限更新其他学生信息");
             }
-            
+
             // 某些字段学生不能修改
-            studentInfo.setStudentId(existInfo.getStudentId());
+            studentInfo.setStudentNumber(existInfo.getStudentNumber());
             studentInfo.setRealName(existInfo.getRealName());
             studentInfo.setCollege(existInfo.getCollege());
             studentInfo.setMajor(existInfo.getMajor());
             studentInfo.setClassName(existInfo.getClassName());
             studentInfo.setEnrollmentYear(existInfo.getEnrollmentYear());
             studentInfo.setGraduationYear(existInfo.getGraduationYear());
-            studentInfo.setEducationLevel(existInfo.getEducationLevel());
+            studentInfo.setEducation(existInfo.getEducation());
             studentInfo.setCounselorId(existInfo.getCounselorId());
         } else {
             // 管理员可以更新任何学生信息
@@ -150,7 +150,7 @@ public class StudentInfoServiceImpl implements StudentInfoService {
 
         // 设置学生信息
         studentInfo.setUserId(existInfo.getUserId());
-        
+
         // 处理简历文件
         if (resume != null && !resume.isEmpty()) {
             String resumePath = uploadFile(resume);
@@ -162,10 +162,10 @@ public class StudentInfoServiceImpl implements StudentInfoService {
 
         // 更新学生信息
         studentInfoMapper.updateById(studentInfo);
-        
+
         // 如果是管理员更新了就业状态，则同步更新用户表相关字段
-        if (isAdmin && studentInfo.getEmploymentStatus() != null && 
-            !studentInfo.getEmploymentStatus().equals(existInfo.getEmploymentStatus())) {
+        if (isAdmin && studentInfo.getEmploymentStatus() != null &&
+                !studentInfo.getEmploymentStatus().equals(existInfo.getEmploymentStatus())) {
             User userToUpdate = new User();
             userToUpdate.setId(existInfo.getUserId());
             // 可以在这里同步更新用户表中的相关字段
@@ -193,7 +193,7 @@ public class StudentInfoServiceImpl implements StudentInfoService {
         // 学号查询
         String studentId = (String) params.get("studentId");
         if (StringUtils.hasText(studentId)) {
-            queryWrapper.eq(StudentInfo::getStudentId, studentId);
+            queryWrapper.eq(StudentInfo::getStudentNumber, studentId);
         }
 
         // 学院查询
@@ -229,7 +229,7 @@ public class StudentInfoServiceImpl implements StudentInfoService {
         // 学历层次查询
         Integer educationLevel = (Integer) params.get("educationLevel");
         if (educationLevel != null) {
-            queryWrapper.eq(StudentInfo::getEducationLevel, educationLevel);
+            queryWrapper.eq(StudentInfo::getEducation, educationLevel);
         }
 
         // 就业状态查询
@@ -239,8 +239,8 @@ public class StudentInfoServiceImpl implements StudentInfoService {
         }
 
         // 辅导员ID查询
-        Long counselorId = params.get("counselorId") != null ? 
-                Long.parseLong(params.get("counselorId").toString()) : null;
+        Long counselorId = params.get("counselorId") != null ? Long.parseLong(params.get("counselorId").toString())
+                : null;
         if (counselorId != null) {
             queryWrapper.eq(StudentInfo::getCounselorId, counselorId);
         }
@@ -258,7 +258,7 @@ public class StudentInfoServiceImpl implements StudentInfoService {
         List<Long> userIds = studentList.stream()
                 .map(StudentInfo::getUserId)
                 .collect(Collectors.toList());
-        
+
         List<User> userList = new ArrayList<>();
         if (!userIds.isEmpty()) {
             userList = userMapper.selectList(
@@ -272,13 +272,13 @@ public class StudentInfoServiceImpl implements StudentInfoService {
         for (StudentInfo student : studentList) {
             Map<String, Object> detailMap = new HashMap<>();
             detailMap.put("studentInfo", student);
-            
+
             // 查找对应的用户信息
             userList.stream()
                     .filter(user -> user.getId().equals(student.getUserId()))
                     .findFirst()
                     .ifPresent(user -> detailMap.put("user", user));
-            
+
             detailList.add(detailMap);
         }
 
@@ -315,8 +315,8 @@ public class StudentInfoServiceImpl implements StudentInfoService {
 
             // 权限检查：只有自己、辅导员、管理员可以查看详情
             if (currentUser != null) {
-                boolean isSelf = currentUser.getUserType() == 0 && 
-                                 studentInfo.getUserId().equals(currentUser.getId());
+                boolean isSelf = currentUser.getUserType() == 0 &&
+                        studentInfo.getUserId().equals(currentUser.getId());
                 boolean isCounselor = currentUser.getUserType() == 4;
                 boolean isAdmin = currentUser.getUserType() == 2;
 
@@ -324,7 +324,8 @@ public class StudentInfoServiceImpl implements StudentInfoService {
                     if (isCounselor) {
                         // 辅导员只能查看自己负责的学生
                         CounselorInfo counselorInfo = counselorInfoMapper.selectOne(
-                                new LambdaQueryWrapper<CounselorInfo>().eq(CounselorInfo::getUserId, currentUser.getId()));
+                                new LambdaQueryWrapper<CounselorInfo>().eq(CounselorInfo::getUserId,
+                                        currentUser.getId()));
                         if (counselorInfo == null || !counselorInfo.getId().equals(studentInfo.getCounselorId())) {
                             throw new BusinessException("无权查看非本人负责的学生信息");
                         }
@@ -425,8 +426,8 @@ public class StudentInfoServiceImpl implements StudentInfoService {
         }
 
         // 权限检查：只有自己、辅导员、管理员可以更新就业状态
-        boolean isSelf = currentUser.getUserType() == 0 && 
-                         studentInfo.getUserId().equals(currentUser.getId());
+        boolean isSelf = currentUser.getUserType() == 0 &&
+                studentInfo.getUserId().equals(currentUser.getId());
         boolean isCounselor = currentUser.getUserType() == 4;
         boolean isAdmin = currentUser.getUserType() == 2;
 
@@ -460,7 +461,7 @@ public class StudentInfoServiceImpl implements StudentInfoService {
     public Map<String, Object> getEmploymentStatistics(Map<String, Object> params) {
         // 统计信息结果
         Map<String, Object> result = new HashMap<>();
-        
+
         // 获取当前登录用户
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -469,7 +470,7 @@ public class StudentInfoServiceImpl implements StudentInfoService {
 
         // 构建查询条件
         LambdaQueryWrapper<StudentInfo> queryWrapper = new LambdaQueryWrapper<>();
-        
+
         // 如果是辅导员，只统计自己负责的学生
         if (currentUser != null && currentUser.getUserType() == 4) {
             CounselorInfo counselorInfo = counselorInfoMapper.selectOne(
@@ -478,7 +479,7 @@ public class StudentInfoServiceImpl implements StudentInfoService {
                 queryWrapper.eq(StudentInfo::getCounselorId, counselorInfo.getId());
             }
         }
-        
+
         // 筛选条件
         // 学院查询
         String college = (String) params.get("college");
@@ -501,38 +502,38 @@ public class StudentInfoServiceImpl implements StudentInfoService {
         // 统计总人数
         long totalCount = studentInfoMapper.selectCount(queryWrapper);
         result.put("totalCount", totalCount);
-        
+
         // 统计已就业人数
         LambdaQueryWrapper<StudentInfo> employedWrapper = queryWrapper.clone();
         employedWrapper.eq(StudentInfo::getEmploymentStatus, 1);
         long employedCount = studentInfoMapper.selectCount(employedWrapper);
         result.put("employedCount", employedCount);
-        
+
         // 统计未就业人数
         LambdaQueryWrapper<StudentInfo> unemployedWrapper = queryWrapper.clone();
         unemployedWrapper.eq(StudentInfo::getEmploymentStatus, 0);
         long unemployedCount = studentInfoMapper.selectCount(unemployedWrapper);
         result.put("unemployedCount", unemployedCount);
-        
+
         // 计算就业率
         double employmentRate = totalCount > 0 ? (double) employedCount / totalCount * 100 : 0;
         result.put("employmentRate", String.format("%.2f%%", employmentRate));
-        
+
         // 按专业统计就业率
         if (!StringUtils.hasText(major)) {
             List<Map<String, Object>> majorStats = getMajorStatistics(queryWrapper.clone());
             result.put("majorStatistics", majorStats);
         }
-        
+
         // 按学院统计就业率
         if (!StringUtils.hasText(college)) {
             List<Map<String, Object>> collegeStats = getCollegeStatistics(queryWrapper.clone());
             result.put("collegeStatistics", collegeStats);
         }
-        
+
         return result;
     }
-    
+
     /**
      * 按专业统计就业信息
      */
@@ -542,37 +543,38 @@ public class StudentInfoServiceImpl implements StudentInfoService {
                 new LambdaQueryWrapper<StudentInfo>()
                         .select(StudentInfo::getMajor)
                         .groupBy(StudentInfo::getMajor));
-        
+
         List<Map<String, Object>> result = new ArrayList<>();
         for (Object majorObj : majors) {
             String major = (String) majorObj;
-            if (!StringUtils.hasText(major)) continue;
-            
+            if (!StringUtils.hasText(major))
+                continue;
+
             Map<String, Object> majorStat = new HashMap<>();
             majorStat.put("major", major);
-            
+
             // 该专业总人数
             LambdaQueryWrapper<StudentInfo> majorWrapper = baseWrapper.clone();
             majorWrapper.eq(StudentInfo::getMajor, major);
             long totalCount = studentInfoMapper.selectCount(majorWrapper);
             majorStat.put("totalCount", totalCount);
-            
+
             // 该专业已就业人数
             LambdaQueryWrapper<StudentInfo> employedWrapper = majorWrapper.clone();
             employedWrapper.eq(StudentInfo::getEmploymentStatus, 1);
             long employedCount = studentInfoMapper.selectCount(employedWrapper);
             majorStat.put("employedCount", employedCount);
-            
+
             // 计算就业率
             double employmentRate = totalCount > 0 ? (double) employedCount / totalCount * 100 : 0;
             majorStat.put("employmentRate", String.format("%.2f%%", employmentRate));
-            
+
             result.add(majorStat);
         }
-        
+
         return result;
     }
-    
+
     /**
      * 按学院统计就业信息
      */
@@ -582,37 +584,38 @@ public class StudentInfoServiceImpl implements StudentInfoService {
                 new LambdaQueryWrapper<StudentInfo>()
                         .select(StudentInfo::getCollege)
                         .groupBy(StudentInfo::getCollege));
-        
+
         List<Map<String, Object>> result = new ArrayList<>();
         for (Object collegeObj : colleges) {
             String college = (String) collegeObj;
-            if (!StringUtils.hasText(college)) continue;
-            
+            if (!StringUtils.hasText(college))
+                continue;
+
             Map<String, Object> collegeStat = new HashMap<>();
             collegeStat.put("college", college);
-            
+
             // 该学院总人数
             LambdaQueryWrapper<StudentInfo> collegeWrapper = baseWrapper.clone();
             collegeWrapper.eq(StudentInfo::getCollege, college);
             long totalCount = studentInfoMapper.selectCount(collegeWrapper);
             collegeStat.put("totalCount", totalCount);
-            
+
             // 该学院已就业人数
             LambdaQueryWrapper<StudentInfo> employedWrapper = collegeWrapper.clone();
             employedWrapper.eq(StudentInfo::getEmploymentStatus, 1);
             long employedCount = studentInfoMapper.selectCount(employedWrapper);
             collegeStat.put("employedCount", employedCount);
-            
+
             // 计算就业率
             double employmentRate = totalCount > 0 ? (double) employedCount / totalCount * 100 : 0;
             collegeStat.put("employmentRate", String.format("%.2f%%", employmentRate));
-            
+
             result.add(collegeStat);
         }
-        
+
         return result;
     }
-    
+
     /**
      * 上传文件
      *
@@ -623,6 +626,9 @@ public class StudentInfoServiceImpl implements StudentInfoService {
         try {
             // 生成文件保存路径
             String originalFilename = file.getOriginalFilename();
+            if (originalFilename == null) {
+                throw new BusinessException("文件名不能为空");
+            }
             String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
             String fileName = UUID.randomUUID().toString() + fileExtension;
             String subDir = "student/resume";
@@ -641,4 +647,4 @@ public class StudentInfoServiceImpl implements StudentInfoService {
             throw new BusinessException("文件上传失败: " + e.getMessage());
         }
     }
-} 
+}

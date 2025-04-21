@@ -11,61 +11,36 @@ import java.time.LocalDateTime;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("sys_config")
+@TableName("system_config")
 public class SystemConfig extends BaseEntity {
-    
+
     /**
-     * 配置名称
-     */
-    private String configName;
-    
-    /**
-     * 配置键
+     * 配置键名
      */
     private String configKey;
-    
+
     /**
      * 配置值
      */
     private String configValue;
-    
+
     /**
-     * 系统内置（0否 1是）
+     * 配置类型（string,number,boolean,json）
      */
-    private Integer configType;
-    
+    private String configType;
+
     /**
-     * 配置分组
+     * 备注说明
      */
-    private String configGroup;
-    
+    private String remark;
+
     /**
-     * 是否允许修改（0允许 1不允许）
+     * 最后修改时间
      */
-    private Integer isModifiable;
-    
+    private LocalDateTime lastModifiedTime;
+
     /**
-     * 配置状态（0正常 1停用）
+     * 修改人ID
      */
-    private Integer status;
-    
-    /**
-     * 配置描述
-     */
-    private String description;
-    
-    /**
-     * 配置值类型（0字符串 1数字 2布尔 3JSON）
-     */
-    private Integer valueType;
-    
-    /**
-     * 修改人
-     */
-    private String modifier;
-    
-    /**
-     * 修改时间
-     */
-    private LocalDateTime modifyTime;
-} 
+    private Long modifiedByUserId;
+}

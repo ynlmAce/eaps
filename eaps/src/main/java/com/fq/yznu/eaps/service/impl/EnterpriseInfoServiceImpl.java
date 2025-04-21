@@ -110,7 +110,7 @@ public class EnterpriseInfoServiceImpl implements EnterpriseInfoService {
         // 设置企业信息
         enterpriseInfo.setId(existInfo.getId());
         enterpriseInfo.setUserId(currentUser.getId());
-        
+
         // 处理营业执照文件
         if (license != null && !license.isEmpty()) {
             String licensePath = uploadFile(license, "license");
@@ -271,8 +271,8 @@ public class EnterpriseInfoServiceImpl implements EnterpriseInfoService {
     /**
      * 审核企业信息
      *
-     * @param id           企业ID
-     * @param verifyStatus 审核状态（1：通过，2：拒绝）
+     * @param id            企业ID
+     * @param verifyStatus  审核状态（1：通过，2：拒绝）
      * @param verifyComment 审核意见
      */
     @Override
@@ -340,6 +340,9 @@ public class EnterpriseInfoServiceImpl implements EnterpriseInfoService {
         try {
             // 生成文件保存路径
             String originalFilename = file.getOriginalFilename();
+            if (originalFilename == null) {
+                throw new BusinessException("文件名不能为空");
+            }
             String fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
             String fileName = UUID.randomUUID().toString() + fileExtension;
             String subDir = "enterprise/" + type;
@@ -371,22 +374,27 @@ public class EnterpriseInfoServiceImpl implements EnterpriseInfoService {
         if (!oldInfo.getEnterpriseName().equals(newInfo.getEnterpriseName())) {
             return true;
         }
-        
+
         // 企业法人修改
         if (!oldInfo.getLegalPerson().equals(newInfo.getLegalPerson())) {
             return true;
         }
-        
+
         // 企业类型修改
         if (!oldInfo.getEnterpriseType().equals(newInfo.getEnterpriseType())) {
             return true;
         }
-        
+
         // 营业执照修改
         if (newInfo.getLicensePath() != null && !oldInfo.getLicensePath().equals(newInfo.getLicensePath())) {
             return true;
         }
-        
+
         return false;
     }
-} 
+
+    @Override
+    public EnterpriseInfo getEnterpriseInfo(Long id) {
+        return enterpriseInfoMapper.selectById(id);
+    }
+}

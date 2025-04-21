@@ -1,9 +1,12 @@
 package com.fq.yznu.eaps.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -24,8 +27,9 @@ public class EmploymentInfo implements Serializable {
     /**
      * 学生ID
      */
+    @NotNull(message = "学生ID不能为空")
     private Long studentId;
-    
+
     /**
      * 学生姓名
      */
@@ -35,6 +39,7 @@ public class EmploymentInfo implements Serializable {
     /**
      * 就业状态：0未就业，1已就业，2升学，3创业，4灵活就业
      */
+    @NotNull(message = "就业状态不能为空")
     private Integer employmentStatus;
 
     /**
@@ -70,7 +75,7 @@ public class EmploymentInfo implements Serializable {
     /**
      * 月薪（元）
      */
-    private Integer monthlySalary;
+    private BigDecimal monthlySalary;
 
     /**
      * 合同期限（月）
@@ -126,44 +131,46 @@ public class EmploymentInfo implements Serializable {
      * 审核备注
      */
     private String verifyRemark;
-    
+
     /**
      * 审核时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime verifyTime;
 
     /**
      * 毕业年份
      */
+    @NotNull(message = "毕业年份不能为空")
     private Integer graduationYear;
-    
+
     /**
      * 学院ID
      */
     private Long collegeId;
-    
+
     /**
      * 学院名称（冗余字段，非表字段）
      */
     @TableField(exist = false)
     private String collegeName;
-    
+
     /**
      * 专业ID
      */
     private Long majorId;
-    
+
     /**
      * 专业名称（冗余字段，非表字段）
      */
     @TableField(exist = false)
     private String majorName;
-    
+
     /**
      * 班级ID
      */
     private Long classId;
-    
+
     /**
      * 班级名称（冗余字段，非表字段）
      */
@@ -173,12 +180,14 @@ public class EmploymentInfo implements Serializable {
     /**
      * 创建时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     /**
      * 更新时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
@@ -187,4 +196,4 @@ public class EmploymentInfo implements Serializable {
      */
     @TableLogic
     private Integer deleted;
-} 
+}

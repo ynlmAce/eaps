@@ -30,18 +30,27 @@ public interface AuthService {
     void register(Map<String, Object> registerDTO);
 
     /**
-     * 找回密码
+     * 获取密保问题
      *
      * @param username 用户名
-     * @param email    邮箱
+     * @return 密保问题
      */
-    void forgotPassword(String username, String email);
+    String getSecurityQuestion(String username);
+
+    /**
+     * 验证密保答案
+     *
+     * @param username 用户名
+     * @param answer   密保答案
+     * @return 验证令牌
+     */
+    String verifySecurityAnswer(String username, String answer);
 
     /**
      * 重置密码
      *
-     * @param token    重置令牌
+     * @param token    验证令牌
      * @param password 新密码
      */
     void resetPassword(String token, String password);
-} 
+}

@@ -1,18 +1,28 @@
 package com.fq.yznu.eaps.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 职位申请表
+ * 职位申请实体类
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @TableName("job_application")
-public class JobApplication extends BaseEntity {
+public class JobApplication implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    
+    /**
+     * 主键ID
+     */
+    @TableId(value = "id", type = IdType.AUTO)
+    private Long id;
     
     /**
      * 职位ID
@@ -20,37 +30,37 @@ public class JobApplication extends BaseEntity {
     private Long jobId;
     
     /**
-     * 学生用户ID
+     * 学生ID
      */
     private Long studentId;
     
     /**
-     * 企业用户ID
+     * 企业ID
      */
     private Long enterpriseId;
     
     /**
-     * 简历类型（0在线填写 1附件上传）
+     * 简历类型（0：在线填写，1：附件上传）
      */
     private Integer resumeType;
     
     /**
-     * 简历路径（附件上传时有值）
-     */
-    private String resumePath;
-    
-    /**
-     * 简历内容（在线填写时有值，JSON格式）
+     * 简历内容（在线填写时使用）
      */
     private String resumeContent;
     
     /**
-     * 求职信
+     * 简历路径（附件上传时使用）
      */
-    private String coverLetter;
+    private String resumePath;
     
     /**
-     * 申请状态（0已申请 1已查看 2面试中 3已录用 4已拒绝）
+     * 自我介绍
+     */
+    private String selfIntroduction;
+    
+    /**
+     * 申请状态（0：已申请，1：已查看，2：面试中，3：已录用，4：已拒绝，5：已撤销）
      */
     private Integer status;
     
@@ -60,9 +70,19 @@ public class JobApplication extends BaseEntity {
     private LocalDateTime applyTime;
     
     /**
-     * 企业查看时间
+     * 查看时间
      */
     private LocalDateTime viewTime;
+    
+    /**
+     * 企业反馈
+     */
+    private String feedback;
+    
+    /**
+     * 反馈时间
+     */
+    private LocalDateTime feedbackTime;
     
     /**
      * 面试时间
@@ -90,12 +110,18 @@ public class JobApplication extends BaseEntity {
     private String interviewRemark;
     
     /**
-     * 企业反馈
+     * 创建时间
      */
-    private String feedback;
+    private LocalDateTime createTime;
     
     /**
-     * 企业反馈时间
+     * 更新时间
      */
-    private LocalDateTime feedbackTime;
+    private LocalDateTime updateTime;
+    
+    /**
+     * 逻辑删除标志：0未删除，1已删除
+     */
+    @TableLogic
+    private Integer deleted;
 } 

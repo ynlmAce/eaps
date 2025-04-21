@@ -11,16 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -64,7 +62,7 @@ public class EmploymentInfoController {
     /**
      * 获取学生的就业信息
      *
-     * @param studentId 学生ID
+     * @param studentId      学生ID
      * @param graduationYear 毕业年份
      * @return 就业信息
      */
@@ -106,7 +104,7 @@ public class EmploymentInfoController {
     /**
      * 更新就业信息（管理员）
      *
-     * @param id 就业信息ID
+     * @param id             就业信息ID
      * @param employmentInfo 就业信息
      * @return 成功响应
      */
@@ -123,7 +121,7 @@ public class EmploymentInfoController {
     /**
      * 审核就业信息
      *
-     * @param id 就业信息ID
+     * @param id           就业信息ID
      * @param verifyStatus 审核状态
      * @param verifyRemark 审核备注
      * @return 成功响应
@@ -181,7 +179,7 @@ public class EmploymentInfoController {
     /**
      * 获取专业就业统计
      *
-     * @param collegeId 学院ID
+     * @param collegeId      学院ID
      * @param graduationYear 毕业年份
      * @return 专业就业统计
      */
@@ -197,7 +195,7 @@ public class EmploymentInfoController {
     /**
      * 获取班级就业统计
      *
-     * @param majorId 专业ID
+     * @param majorId        专业ID
      * @param graduationYear 毕业年份
      * @return 班级就业统计
      */
@@ -279,7 +277,7 @@ public class EmploymentInfoController {
         String filePath = employmentInfoService.generateEmploymentReport(graduationYear);
         return ResponseResult.success(filePath);
     }
-    
+
     /**
      * 下载就业报表
      *
@@ -293,22 +291,22 @@ public class EmploymentInfoController {
             HttpServletResponse response) throws IOException {
         String filePath = employmentInfoService.generateEmploymentReport(graduationYear);
         File file = new File(filePath);
-        
+
         if (!file.exists()) {
             response.setContentType("application/json;charset=UTF-8");
             response.getWriter().write("{\"code\": 500, \"message\": \"报表文件不存在\"}");
             return;
         }
-        
+
         // 设置响应头
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setCharacterEncoding("utf-8");
         String fileName = URLEncoder.encode("就业信息统计报表_" + graduationYear + "届.xlsx", StandardCharsets.UTF_8.toString());
         response.setHeader("Content-disposition", "attachment;filename=" + fileName);
-        
+
         // 写入响应流
         try (FileInputStream inputStream = new FileInputStream(file);
-             OutputStream outputStream = response.getOutputStream()) {
+                OutputStream outputStream = response.getOutputStream()) {
             byte[] buffer = new byte[1024];
             int bytesRead;
             while ((bytesRead = inputStream.read(buffer)) != -1) {
@@ -320,7 +318,7 @@ public class EmploymentInfoController {
             response.getWriter().write("{\"code\": 500, \"message\": \"报表下载失败: " + e.getMessage() + "\"}");
         }
     }
-    
+
     /**
      * 按学院生成就业报表
      *
@@ -336,7 +334,7 @@ public class EmploymentInfoController {
         String filePath = employmentInfoService.generateCollegeReport(collegeId, graduationYear);
         return ResponseResult.success(filePath);
     }
-    
+
     /**
      * 按专业生成就业报表
      *
@@ -352,7 +350,7 @@ public class EmploymentInfoController {
         String filePath = employmentInfoService.generateMajorReport(majorId, graduationYear);
         return ResponseResult.success(filePath);
     }
-    
+
     /**
      * 按班级生成就业报表
      *
@@ -368,4 +366,4 @@ public class EmploymentInfoController {
         String filePath = employmentInfoService.generateClassReport(classId, graduationYear);
         return ResponseResult.success(filePath);
     }
-} 
+}

@@ -1,6 +1,9 @@
 package com.fq.yznu.eaps.vo.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fq.yznu.eaps.entity.EnterpriseInfo;
+import com.fq.yznu.eaps.entity.EnterprisePromotion;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -9,7 +12,14 @@ import java.time.LocalDateTime;
  * 企业推广详情视图对象
  */
 @Data
+@Schema(description = "推广详情响应")
 public class PromotionDetailVO {
+
+    @Schema(description = "推广信息")
+    private EnterprisePromotion promotion;
+
+    @Schema(description = "企业信息")
+    private EnterpriseInfo enterpriseInfo;
 
     /**
      * 主键ID
@@ -25,22 +35,22 @@ public class PromotionDetailVO {
      * 企业名称
      */
     private String enterpriseName;
-    
+
     /**
      * 企业联系电话
      */
     private String enterprisePhone;
-    
+
     /**
      * 企业邮箱
      */
     private String enterpriseEmail;
-    
+
     /**
      * 企业Logo
      */
     private String enterpriseLogo;
-    
+
     /**
      * 企业简介
      */
@@ -70,7 +80,7 @@ public class PromotionDetailVO {
      * 附件URL，多个附件以逗号分隔
      */
     private String attachmentUrls;
-    
+
     /**
      * 附件列表
      */
@@ -85,7 +95,7 @@ public class PromotionDetailVO {
      * 状态：0-待审核、1-已通过、2-已拒绝
      */
     private Integer status;
-    
+
     /**
      * 状态文本
      */
@@ -149,4 +159,4 @@ public class PromotionDetailVO {
      * 联系邮箱
      */
     private String contactEmail;
-} 
+}

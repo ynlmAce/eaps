@@ -1,20 +1,22 @@
 package com.fq.yznu.eaps.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
- * 用户表
+ * 用户实体类
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-@TableName("sys_user")
-public class User extends BaseEntity {
+@TableName("user")
+public class User {
+
+    @TableId(value = "id", type = IdType.AUTO)
+    private Long id;
 
     /**
-     * 用户账号
+     * 用户名
      */
     private String username;
 
@@ -24,57 +26,67 @@ public class User extends BaseEntity {
     private String password;
 
     /**
-     * 用户昵称
+     * 昵称
      */
     private String nickname;
 
     /**
-     * 用户类型（0普通用户 1管理员 2超级管理员 3企业用户 4辅导员）
+     * 真实姓名
      */
-    private Integer userType;
+    private String realName;
 
     /**
-     * 用户邮箱
+     * 邮箱
      */
     private String email;
-    
-    /**
-     * 手机号码
-     */
-    private String phonenumber;
 
     /**
-     * 用户性别（0男 1女 2未知）
+     * 手机号
      */
-    private Integer sex;
+    private String phone;
 
     /**
-     * 头像地址
+     * 头像路径
      */
     private String avatar;
 
     /**
-     * 帐号状态（0正常 1停用）
+     * 用户类型（0：学生，1：老师，2：管理员，3：企业）
+     */
+    private Integer userType;
+
+    /**
+     * 状态（0：禁用，1：启用）
      */
     private Integer status;
 
     /**
-     * 最后登录IP
+     * 创建时间
      */
-    private String loginIp;
+    private String createTime;
+
+    /**
+     * 更新时间
+     */
+    private String updateTime;
 
     /**
      * 最后登录时间
      */
-    private String loginDate;
-    
+    private String lastLoginTime;
+
     /**
-     * 登录失败次数
+     * 最后登录IP
      */
-    private Integer loginFailCount;
-    
+    private String lastLoginIp;
+
     /**
-     * 锁定结束时间
+     * 密保问题
      */
-    private String lockEndTime;
-} 
+    private String securityQuestion;
+
+    /**
+     * 密保答案
+     */
+    private String securityAnswer;
+}

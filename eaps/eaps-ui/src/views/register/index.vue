@@ -68,6 +68,24 @@
         />
       </el-form-item>
 
+      <el-form-item label="密保问题" prop="securityQuestion">
+        <el-select v-model="registerForm.securityQuestion" placeholder="请选择密保问题" style="width: 100%">
+          <el-option label="您的出生地是？" value="birthplace" />
+          <el-option label="您母亲的姓名是？" value="mother_name" />
+          <el-option label="您父亲的姓名是？" value="father_name" />
+          <el-option label="您的小学校名是？" value="primary_school" />
+          <el-option label="您最喜欢的颜色是？" value="favorite_color" />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="密保答案" prop="securityAnswer">
+        <el-input 
+          v-model="registerForm.securityAnswer" 
+          placeholder="请输入密保答案"
+          prefix-icon="Lock"
+        />
+      </el-form-item>
+
       <!-- 学生特有信息 -->
       <template v-if="registerForm.userType === 0">
         <div class="section-title">学生信息</div>
@@ -177,6 +195,8 @@ const registerForm = reactive({
   confirmPassword: '',
   email: '',
   phone: '',
+  securityQuestion: '', // 添加密保问题
+  securityAnswer: '', // 添加密保答案
   // 学生信息
   realName: '',
   studentNumber: '',
@@ -286,6 +306,13 @@ const registerRules = {
   ],
   position: [
     { required: true, message: '请输入职务', trigger: 'blur' }
+  ],
+  securityQuestion: [
+    { required: true, message: '请选择密保问题', trigger: 'change' }
+  ],
+  securityAnswer: [
+    { required: true, message: '请输入密保答案', trigger: 'blur' },
+    { min: 2, max: 50, message: '密保答案长度应在2-50个字符之间', trigger: 'blur' }
   ]
 }
 

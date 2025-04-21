@@ -1,28 +1,21 @@
 package com.fq.yznu.eaps.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * 企业评分实体类
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-@Accessors(chain = true)
-@TableName("t_enterprise_rating")
+@TableName("enterprise_rating")
 public class EnterpriseRating implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -30,26 +23,43 @@ public class EnterpriseRating implements Serializable {
     /**
      * 主键ID
      */
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
-    @JsonSerialize(using = ToStringSerializer.class)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
      * 企业ID
      */
-    @JsonSerialize(using = ToStringSerializer.class)
     private Long enterpriseId;
 
     /**
      * 学生ID
      */
-    @JsonSerialize(using = ToStringSerializer.class)
     private Long studentId;
 
     /**
-     * 评分（1-5星）
+     * 总评分（1-5）
      */
-    private Integer rating;
+    private BigDecimal rating;
+
+    /**
+     * 工作环境评分（1-5）
+     */
+    private Double environmentRating;
+
+    /**
+     * 薪资福利评分（1-5）
+     */
+    private Double salaryRating;
+
+    /**
+     * 成长空间评分（1-5）
+     */
+    private Double developmentRating;
+
+    /**
+     * 企业文化评分（1-5）
+     */
+    private Double cultureRating;
 
     /**
      * 评价内容
@@ -57,9 +67,19 @@ public class EnterpriseRating implements Serializable {
     private String content;
 
     /**
-     * 是否匿名
+     * 标签（JSON数组）
      */
-    private Boolean anonymous;
+    private String tags;
+
+    /**
+     * 评价图片（JSON数组）
+     */
+    private String images;
+
+    /**
+     * 是否匿名（0：否，1：是）
+     */
+    private Integer anonymous;
 
     /**
      * 企业回复
@@ -69,8 +89,7 @@ public class EnterpriseRating implements Serializable {
     /**
      * 回复时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime replyTime;
+    private Date replyTime;
 
     /**
      * 有用数量
@@ -78,77 +97,48 @@ public class EnterpriseRating implements Serializable {
     private Integer helpfulCount;
 
     /**
-     * 状态（0-待审核，1-已通过，2-未通过，3-已申诉）
+     * 状态（0：待审核，1：已通过，2：已拒绝）
      */
     private Integer status;
 
     /**
-     * 审核意见
+     * 审核备注
      */
-    private String reviewComment;
+    private String reviewRemark;
 
     /**
-     * 审核时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime reviewTime;
-
-    /**
-     * 申诉内容
-     */
-    private String appealContent;
-
-    /**
-     * 申诉时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime appealTime;
-
-    /**
-     * 申诉状态（0-待处理，1-已驳回，2-已通过）
+     * 申诉状态（0：未申诉，1：申诉中，2：申诉成功，3：申诉失败）
      */
     private Integer appealStatus;
 
     /**
-     * 申诉处理意见
+     * 申诉内容
      */
-    private String appealReviewComment;
+    private String appealComment;
 
     /**
-     * 申诉处理时间
+     * 申诉证据
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime appealReviewTime;
+    private String appealEvidence;
 
     /**
-     * 已标记有用的用户ID列表（JSON数组）
+     * 申诉时间
      */
-    @JsonIgnore
-    private String helpfulUsers;
-
-    /**
-     * 是否删除
-     */
-    @TableLogic
-    @JsonIgnore
-    private Boolean deleted;
+    private LocalDateTime appealTime;
 
     /**
      * 创建时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;
 
     /**
      * 更新时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateTime;
 
     /**
-     * 乐观锁
+     * 逻辑删除标志：0未删除，1已删除
      */
-    @TableField("version")
-    @JsonIgnore
-    private Integer version;
-} 
+    @TableLogic
+    private Integer deleted;
+}

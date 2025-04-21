@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.fq.yznu.eaps.entity.EnterprisePromotion;
-import com.fq.yznu.eaps.vo.request.PromotionQueryReq;
 import com.fq.yznu.eaps.vo.request.PromotionReviewReq;
 import com.fq.yznu.eaps.vo.response.PromotionDetailVO;
 
@@ -27,15 +26,15 @@ public interface EnterprisePromotionService extends IService<EnterprisePromotion
     /**
      * 分页查询企业宣传信息列表
      *
-     * @param page 分页参数
+     * @param page         分页参数
      * @param enterpriseId 企业ID
-     * @param title 标题关键词
-     * @param type 宣传类型
-     * @param status 状态
+     * @param title        标题关键词
+     * @param type         宣传类型
+     * @param status       状态
      * @return 分页结果
      */
-    IPage<EnterprisePromotion> pageList(Page<EnterprisePromotion> page, Long enterpriseId, String title, 
-                                      Integer type, Integer status);
+    IPage<EnterprisePromotion> pageList(Page<EnterprisePromotion> page, Long enterpriseId, String title,
+            Integer type, Integer status);
 
     /**
      * 获取企业宣传信息详情
@@ -88,7 +87,7 @@ public interface EnterprisePromotionService extends IService<EnterprisePromotion
     /**
      * 设置置顶状态
      *
-     * @param id 宣传信息ID
+     * @param id    宣传信息ID
      * @param isTop 是否置顶：0否，1是
      * @return 是否成功
      */
@@ -112,7 +111,7 @@ public interface EnterprisePromotionService extends IService<EnterprisePromotion
     /**
      * 获取最新的企业宣传列表
      *
-     * @param type 宣传类型：1企业介绍，2宣讲会通知
+     * @param type  宣传类型：1企业介绍，2宣讲会通知
      * @param limit 限制数量
      * @return 宣传信息列表
      */
@@ -121,7 +120,7 @@ public interface EnterprisePromotionService extends IService<EnterprisePromotion
     /**
      * 获取热门企业宣传列表
      *
-     * @param type 宣传类型：1企业介绍，2宣讲会通知
+     * @param type  宣传类型：1企业介绍，2宣讲会通知
      * @param limit 限制数量
      * @return 宣传信息列表
      */
@@ -130,10 +129,10 @@ public interface EnterprisePromotionService extends IService<EnterprisePromotion
     /**
      * 审核宣传信息
      *
-     * @param id 宣传信息ID
-     * @param status 审核状态：1-通过、2-拒绝
+     * @param id             宣传信息ID
+     * @param status         审核状态：1-通过、2-拒绝
      * @param reviewComments 审核意见
-     * @param reviewerId 审核人ID
+     * @param reviewerId     审核人ID
      * @return 是否成功
      */
     boolean review(Long id, Integer status, String reviewComments, Long reviewerId);
@@ -141,7 +140,7 @@ public interface EnterprisePromotionService extends IService<EnterprisePromotion
     /**
      * 获取特定类型的最新宣传信息列表
      *
-     * @param type 宣传类型
+     * @param type  宣传类型
      * @param limit 限制数量
      * @return 宣传信息列表
      */
@@ -154,4 +153,4 @@ public interface EnterprisePromotionService extends IService<EnterprisePromotion
      * @return 推广详情视图对象
      */
     PromotionDetailVO getPromotionDetailWithEnterpriseInfo(Long id);
-} 
+}
