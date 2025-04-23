@@ -1,0 +1,88 @@
+package com.fq.yznu.eaps.service;
+
+import com.fq.yznu.eaps.entity.User;
+import com.fq.yznu.eaps.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.Map;
+import java.util.Optional;
+
+/**
+ * 用户服务接口
+ */
+@Service
+public class UserService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    /**
+     * 获取当前登录用户信息
+     *
+     * @return 用户信息
+     */
+    public Map<String, Object> getCurrentUserInfo() {
+        // Implementation needed
+        throw new UnsupportedOperationException("Method not implemented");
+    }
+
+    /**
+     * 更新当前用户信息
+     *
+     * @param user 用户信息
+     */
+    public void updateUserInfo(User user) {
+        // Implementation needed
+        throw new UnsupportedOperationException("Method not implemented");
+    }
+
+    /**
+     * 修改密码
+     *
+     * @param oldPassword 旧密码
+     * @param newPassword 新密码
+     */
+    void updatePassword(String oldPassword, String newPassword);
+
+    /**
+     * 获取用户列表
+     *
+     * @param queryParams 查询参数
+     * @return 用户列表与分页信息
+     */
+    Map<String, Object> getUserList(Map<String, Object> queryParams);
+
+    /**
+     * 获取用户详情
+     *
+     * @param id 用户ID
+     * @return 用户详情
+     */
+    Map<String, Object> getUserDetail(Long id);
+
+    /**
+     * 添加用户
+     *
+     * @param user 用户信息
+     */
+    void addUser(User user);
+
+    /**
+     * 更新用户
+     *
+     * @param user 用户信息
+     */
+    void updateUser(User user);
+
+    /**
+     * 删除用户
+     *
+     * @param id 用户ID
+     */
+    void deleteUser(Long id);
+}
